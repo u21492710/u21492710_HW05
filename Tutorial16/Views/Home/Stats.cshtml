@@ -1,0 +1,31 @@
+﻿@model Tutorial16.ViewModels.StatsViewModel
+@{
+    ViewBag.Title = "Stats";
+}
+
+<h2>Stats</h2>
+
+<label>Total number of people:</label><br />
+<h3>@Model.TotalNumber</h3>
+<hr />
+<label>Total number of males:</label><br />
+<h3>@Model.NumberMale</h3>
+<hr />
+<label>Total number of females:</label><br />
+<h3>@Model.NumberFemale</h3>
+<hr />
+<label>Average age:</label><br />
+<h3>@Math.Round(Model.AverageAge,2)</h3>
+<hr />
+<label>Youngest age:</label><br />
+<h3>@Model.Youngest</h3>
+<hr />
+<label>Oldest age:</label><br />
+<h3>@Model.Oldest</h3>
+<hr />
+<label>Combined age:</label><br />
+<h3>@Model.CombinedAge</h3>
+<hr />
+
+
+

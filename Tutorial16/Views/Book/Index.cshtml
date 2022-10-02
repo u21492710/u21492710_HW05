@@ -1,0 +1,57 @@
+﻿@model List<Tutorial16.Models.Borrows>
+@using Tutorial16.Models;
+@*This is for the borrws*@ 
+@{
+    ViewBag.Title = "Index";
+}
+@{
+    if (ViewBag.status == "Available")
+    {
+        <h1>@ViewBag.name - <span style="color: green">Book Available </span></h1>
+    }
+    else
+    {
+        <h1>@ViewBag.name - <span style="color: red">Book Out </span></h1>
+    }
+}
+
+<table class="table">
+    <tr>
+        <th style="font-size:30px"># Borrows - @ViewBag.borrowed</th>
+        <th style="width:20%">@Html.ActionLink("View Students ", "Index", "Student", new { bookId = ViewBag.bookId }, new { @class = "btn btn-primary" })</th>
+
+    </tr>
+</table>
+
+<table class="table">
+    <tr>
+        <th>#</th>
+        <th>Taken Date</th>
+        <th>Brought Date</th>
+        <th>Borrowed By</th>
+
+
+    </tr>
+    @foreach (Borrows borr in Model)
+    {
+    <tr>
+        <td>@borr.borrowID</td>
+        <td>@Convert.ToDateTime(borr.takenDate)</td>
+        @{
+            if (borr.broughtDate == "")
+            {
+                <td>Book Out</td>
+            }
+            else
+            {
+                <td>@Convert.ToDateTime(borr.broughtDate)</td>
+            }
+        }
+
+        <td>@borr.name @borr.surname</td>
+
+    </tr>
+    }
+</table>
+
+

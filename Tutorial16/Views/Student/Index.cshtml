@@ -1,0 +1,156 @@
+﻿@model Tutorial16.ViewModels.BooksTypes
+@using Tutorial16.Models;
+@*This is for the Students*@
+@{
+    ViewBag.Title = "Home Page";
+}
+<style type="text/css">
+    .crudContainer {
+        position: absolute;
+        width: 75%;
+    }
+
+    .roundAddButton {
+        position: absolute;
+        top: 20px;
+        right: 0;
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        border-radius: 60%;
+    }
+
+    .plainAddButton {
+        position: absolute;
+        top: 16px;
+        right: 0;
+        font-size: 32px;
+    }
+
+    #advancedDiv {
+        border: 1px solid #cccccc;
+        width: 60%;
+        padding: 25px;
+    }
+</style>
+
+<script>
+    function toggleAdvanced()
+    {
+        if (document.getElementById("advancedDiv").classList.contains("hiddenDiv"))
+        {
+            document.getElementById("advancedDiv").classList.remove('hiddenDiv');
+            document.getElementById("advancedDiv").style.display = "block";
+            document.getElementById("advancedBtn").innerText = "Close";
+        }
+        else
+        {
+            document.getElementById("advancedDiv").classList.add('hiddenDiv');
+            document.getElementById("advancedDiv").style.display = "none";
+            document.getElementById("advancedBtn").innerText = "Advanced Search";
+        }
+
+    }
+</script>
+
+@if (ViewBag.Status != 0)
+{
+    <div class="row crudContainer">
+        <h1>Students</h1>
+        @using (Html.BeginForm("ComplexSearch", "Student", FormMethod.Post, new { style = "width:100%" }))
+        {
+
+            List<SelectListItem> listItems1 = new List<SelectListItem>();
+            listItems1.Add(new SelectListItem
+            {
+                Text = "Select a Type",
+                Value = "NADA",
+                Selected = true
+            });
+
+            foreach (string item in Model.types)
+            {
+                listItems1.Add(new SelectListItem
+                {
+                    Text = item,
+                    Value = item,
+                    Selected = true
+                });
+            }
+
+            
+            <table class="table">
+                <tr>
+                    <th style="width:20%"><input type="text" style="max-width:none; display:flex" name="searchText" class="form-control" placeholder="Search" /></th>
+                    <th style="width:20%;">@Html.DropDownList("className", new SelectList(listItems1, "Value", "Text"), new { @class = "form-control", style = "display:flex;" })</th>
+                    
+                    <th style="width:10%"><button type="submit" class="btn btn-success">Search</button></th>
+                    @{ 
+                        int temp = (int)Session["BookID"];
+                    }
+                    <th style="width:10%">@Html.ActionLink("Clear", "Index", "Student", new { bookId = temp }, new { @class = "btn btn-danger" })</th>
+
+                </tr>
+            </table>
+
+        }
+
+
+        <table class="table">
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Class</th>
+                <th>Points</th>
+                @{
+                    if ((int)Session["BookedStu"] == -1)
+                    {
+                        <th>Borrow Book</th>
+                    }
+                    else
+                    {
+                        <th>Return Book</th>
+                    }
+                }
+              
+                
+
+            </tr>
+            @foreach (Student stu in Model.students)
+            {
+            <tr>
+                <td>@stu.studentId</td>
+                <td>@stu.name</td>
+                <td>@stu.surname</td>
+                <td>@stu.classGrade</td>
+                <td>@stu.Points</td>
+                @{
+                    if ((int)Session["BookedStu"] == -1)
+                    {
+                        <td>@Html.ActionLink("Borrow Book", "CallBorrowBook", "Student", new { studentId = stu.studentId }, new { @class = "btn btn-primary" }) </td>
+                    }
+                    else
+                    {
+                        if (stu.studentId == (int)Session["BookedStu"])
+                        {
+                            <td>@Html.ActionLink("Return Book", "ReturnBook", "Student", new { studentId = stu.studentId }, new { @class = "btn btn-primary" }) </td>
+                        }
+                    }
+                }
+                @*<td>@stu.Points</td>*@
+                @{
+
+                }
+
+            </tr>
+            }
+        </table>
+    </div>
+}
